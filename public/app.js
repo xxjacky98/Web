@@ -76,17 +76,19 @@ async function callSimplePost(url) {
 }
 
 function filterByYearRange(rows, startYear, endYear) {
-  const s = Number(startYear);
-  const e = Number(endYear);
-  const hasS = Number.isFinite(s);
-  const hasE = Number.isFinite(e);
+  const startRaw = String(startYear ?? "").trim();
+  const endRaw = String(endYear ?? "").trim();
+  const hasS = startRaw.length > 0;
+  const hasE = endRaw.length > 0;
+  const s = hasS ? Number(startRaw) : null;
+  const e = hasE ? Number(endRaw) : null;
   if (!hasS && !hasE) return rows;
 
   return (rows || []).filter((r) => {
     const y = Number(yearFromDate(r.date));
     if (!Number.isFinite(y)) return false;
-    if (hasS && y < s) return false;
-    if (hasE && y > e) return false;
+    if (hasS && (!Number.isFinite(s) || y < s)) return false;
+    if (hasE && (!Number.isFinite(e) || y > e)) return false;
     return true;
   });
 }
@@ -263,4 +265,3 @@ window.addEventListener("DOMContentLoaded", async () => {
     setMsg("載入失敗：請確認後端是否正常啟動", "err");
   }
 });
-
