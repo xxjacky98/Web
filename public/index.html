@@ -18,8 +18,17 @@
           <h2>新增一筆電價（A3：日期 / 名稱 / 價格）</h2>
           <form id="create-form" class="form">
             <label class="field">
-              <span>日期（用年度 1/1 表示，例如 2026-01-01）</span>
-              <input id="date" name="date" type="date" required />
+              <span>日期（僅年分，例如 2026）</span>
+              <input
+                id="year"
+                name="year"
+                type="number"
+                inputmode="numeric"
+                min="1900"
+                max="2100"
+                step="1"
+                required
+              />
             </label>
 
             <label class="field">
@@ -99,4 +108,3 @@
     <script src="/app.js"></script>
   </body>
 </html>
-

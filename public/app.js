@@ -38,6 +38,12 @@ function yearFromDate(dateStr) {
   return dateStr.slice(0, 4);
 }
 
+function buildDateFromYear(year) {
+  const y = Number(year);
+  if (!Number.isInteger(y) || y < 1900 || y > 2100) return null;
+  return `${String(y).padStart(4, "0")}-01-01`;
+}
+
 async function fetchPrices() {
   const res = await fetch("/api/prices", { headers: { Accept: "application/json" } });
   if (!res.ok) throw new Error(`GET /api/prices failed: ${res.status}`);
@@ -170,12 +176,9 @@ function renderChart(rows) {
 }
 
 function initDefaultDateAndName() {
-  const dateInput = qs("#date");
+  const yearInput = qs("#year");
   const nameInput = qs("#name");
-  if (!dateInput.value) {
-    const today = new Date();
-    dateInput.value = `${today.getFullYear()}-01-01`;
-  }
+  if (!yearInput.value) yearInput.value = String(new Date().getFullYear());
   nameInput.value = AVG_NAME;
 }
 
@@ -193,8 +196,14 @@ window.addEventListener("DOMContentLoaded", async () => {
     e.preventDefault();
     setMsg("新增中…");
 
+    const date = buildDateFromYear(qs("#year").value);
+    if (!date) {
+      setMsg("年份需為 1900～2100 的整數", "err");
+      return;
+    }
+
     const payload = {
-      date: qs("#date").value,
+      date,
       name: qs("#name").value,
       price: Number(qs("#price").value),
     };
@@ -259,4 +268,3 @@ window.addEventListener("DOMContentLoaded", async () => {
     setMsg("載入失敗：請確認後端是否正常啟動", "err");
   }
 });
-
