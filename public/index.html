@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>電費每度價格觀測站（台電）</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="header">
+        <h1>電費每度價格觀測站（台電）</h1>
+        <p class="subtitle">追蹤「年別 + 平均電價（元/度）」並用圖表呈現趨勢</p>
+      </header>
+
+      <section class="grid-2col">
+        <div class="card">
+          <h2>新增一筆電價（A3：日期 / 名稱 / 價格）</h2>
+          <form id="create-form" class="form">
+            <label class="field">
+              <span>日期（用年度 1/1 表示，例如 2026-01-01）</span>
+              <input id="date" name="date" type="date" required />
+            </label>
+
+            <label class="field">
+              <span>商品名稱（本題固定追蹤台電平均電價）</span>
+              <input id="name" name="name" type="text" value="台電 平均電價(元/度)" />
+            </label>
+
+            <label class="field">
+              <span>商品價格（元/度；小數點後四位）</span>
+              <input id="price" name="price" type="number" inputmode="decimal" min="0" step="0.0001" required />
+            </label>
+
+            <div class="actions">
+              <button type="submit">新增</button>
+              <div id="form-msg" class="msg" role="status" aria-live="polite"></div>
+            </div>
+          </form>
+        </div>
+
+        <div class="card chart-card">
+          <div class="row">
+            <h2>圖表（價格趨勢）</h2>
+          </div>
+
+          <p class="hint">
+            資料來源：你下載的 <code>歷年電價一覽表.xls</code>。按下方按鈕可匯入到資料庫。
+          </p>
+
+          <div class="demo-controls">
+            <button id="import-taipower" type="button">匯入（保留現有資料）</button>
+            <button id="reset-import-taipower" type="button">清空後重新匯入</button>
+            <div id="demo-msg" class="msg" role="status" aria-live="polite"></div>
+          </div>
+
+          <div class="chart-wrap">
+            <canvas id="chart" height="140"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="row">
+          <h2>歷史清單</h2>
+          <div class="filters">
+            <label class="field-inline">
+              <span>查詢：起始年</span>
+              <input id="start-year" type="number" inputmode="numeric" min="1900" max="2100" step="1" />
+            </label>
+            <label class="field-inline">
+              <span>結束年</span>
+              <input id="end-year" type="number" inputmode="numeric" min="1900" max="2100" step="1" />
+            </label>
+            <button id="apply-filter" type="button">查詢</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>年別</th>
+                <th class="num">電價（元/度）</th>
+                <th>建立時間</th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <p>提示：價格顯示固定到小數點後四位。</p>
+      </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script src="/app.js"></script>
+  </body>
+</html>
+
