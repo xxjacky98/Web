@@ -10,25 +10,16 @@
     <main class="container">
       <header class="header">
         <h1>電費每度價格觀測站（台電）</h1>
-        <p class="subtitle">追蹤「年別 + 平均電價（元/度）」並用圖表呈現趨勢</p>
+        <p class="subtitle">追蹤「年別 + 平均電價（元/度）」並用表格與圖表呈現趨勢</p>
       </header>
 
       <section class="grid-2col">
         <div class="card">
-          <h2>新增一筆電價（A3：日期 / 名稱 / 價格）</h2>
+          <h2>新增一筆電價（日期 / 商品名稱 / 商品價格）</h2>
           <form id="create-form" class="form">
             <label class="field">
               <span>日期（僅年分，例如 2026）</span>
-              <input
-                id="year"
-                name="year"
-                type="number"
-                inputmode="numeric"
-                min="1900"
-                max="2100"
-                step="1"
-                required
-              />
+              <input id="year" name="year" type="number" inputmode="numeric" min="1900" max="2100" step="1" required />
             </label>
 
             <label class="field">
@@ -74,7 +65,7 @@
           <h2>歷史清單</h2>
           <div class="filters">
             <label class="field-inline">
-              <span>查詢：起始年</span>
+              <span>起始年</span>
               <input id="start-year" type="number" inputmode="numeric" min="1900" max="2100" step="1" />
             </label>
             <label class="field-inline">
@@ -108,3 +99,4 @@
     <script src="/app.js"></script>
   </body>
 </html>
+

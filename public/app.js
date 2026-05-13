@@ -82,7 +82,7 @@ function filterByYearRange(rows, startYear, endYear) {
   const hasE = Number.isFinite(e);
   if (!hasS && !hasE) return rows;
 
-  return rows.filter((r) => {
+  return (rows || []).filter((r) => {
     const y = Number(yearFromDate(r.date));
     if (!Number.isFinite(y)) return false;
     if (hasS && y < s) return false;
@@ -100,7 +100,6 @@ function renderRows(rows) {
     return;
   }
 
-  // date DESC then id DESC already from API, but keep stable
   tbody.innerHTML = onlyAvg
     .map((r) => {
       return `
@@ -163,19 +162,15 @@ function renderChart(rows) {
       scales: {
         y: {
           title: { display: true, text: "電價（元/度）" },
-          ticks: {
-            callback: (v) => fmt4(v),
-          },
+          ticks: { callback: (v) => fmt4(v) },
         },
-        x: {
-          title: { display: true, text: "年別" },
-        },
+        x: { title: { display: true, text: "年別" } },
       },
     },
   });
 }
 
-function initDefaultDateAndName() {
+function initDefaults() {
   const yearInput = qs("#year");
   const nameInput = qs("#name");
   if (!yearInput.value) yearInput.value = String(new Date().getFullYear());
@@ -190,7 +185,7 @@ async function reloadAndRender({ startYear, endYear } = {}) {
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
-  initDefaultDateAndName();
+  initDefaults();
 
   qs("#create-form").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -268,3 +263,4 @@ window.addEventListener("DOMContentLoaded", async () => {
     setMsg("載入失敗：請確認後端是否正常啟動", "err");
   }
 });
+
