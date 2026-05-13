@@ -95,14 +95,13 @@ function filterByYearRange(rows, startYear, endYear) {
 
 function renderRows(rows) {
   const tbody = qs("#rows");
-  const onlyAvg = (rows || []).filter((r) => (r?.name || "").trim() === AVG_NAME);
-
-  if (!Array.isArray(onlyAvg) || onlyAvg.length === 0) {
+  const list = Array.isArray(rows) ? rows : [];
+  if (list.length === 0) {
     tbody.innerHTML = `<tr><td colspan="3" class="empty">沒有資料</td></tr>`;
     return;
   }
 
-  tbody.innerHTML = onlyAvg
+  tbody.innerHTML = list
     .map((r) => {
       return `
         <tr>
@@ -119,8 +118,9 @@ function renderRows(rows) {
 let chartInstance = null;
 
 function buildSeries(rows) {
-  const onlyAvg = (rows || []).filter((r) => (r?.name || "").trim() === AVG_NAME);
-  const asc = [...onlyAvg].sort((a, b) => String(a.date).localeCompare(String(b.date)));
+  const asc = [...(Array.isArray(rows) ? rows : [])].sort((a, b) =>
+    String(a.date).localeCompare(String(b.date)),
+  );
   return {
     labels: asc.map((r) => yearFromDate(r.date)),
     values: asc.map((r) => Number(r.price)),
